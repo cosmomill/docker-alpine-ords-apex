@@ -22,8 +22,8 @@ ENV DATABASE_PORT 1521
 
 # install ORDS
 ONBUILD ADD $ORDS_FILE /tmp/
-ONBUILD RUN bsdtar -C $TOMCAT_HOME/webapps/ -xf /tmp/$ORDS_FILE ords.war \
-	&& rm -f $ORDS_FILE
+ONBUILD RUN bsdtar -C $TOMCAT_HOME/webapps/ -xf /tmp/ords.$ORDS_VERSION.zip ords.war \
+	&& rm -f ords.$ORDS_VERSION.zip
 
 # set ORDS config directory
 ONBUILD RUN java -jar $TOMCAT_HOME/webapps/ords.war configdir $ORDS_CONFIG_DIR
@@ -32,14 +32,14 @@ ENV SQLCL_VERSION 4.2.0.17.097.0719
 
 # install SQLcl
 ONBUILD ADD $SQLCL_FILE /tmp/
-ONBUILD RUN mkdir -p /var/lib/sqlcl && bsdtar --strip-components=2 -C /var/lib/sqlcl -xf /tmp/$SQLCL_FILE sqlcl/lib/* \
+ONBUILD RUN mkdir -p /var/lib/sqlcl && bsdtar --strip-components=2 -C /var/lib/sqlcl -xf /tmp/sqlcl-$SQLCL_VERSION-no-jre.zip sqlcl/lib/* \
 	\
 	&& echo $'#!/bin/sh\n\
 \n\
 java -jar /var/lib/sqlcl/oracle.sqldeveloper.sqlcl.jar $@\n' > /usr/local/bin/sqlcl \
 	\
 	&& chmod 755 /usr/local/bin/sqlcl \
-	&& rm -f $SQLCL_FILE
+	&& rm -f sqlcl-$SQLCL_VERSION-no-jre.zip
 
 # define mountable directories
 ONBUILD VOLUME /opt
