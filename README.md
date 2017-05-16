@@ -25,6 +25,14 @@ $ docker build -t my_app . --build-arg ORDS_FILE="ords.3.0.9.348.07.16.zip" --bu
 $ docker run -d -P --link <your cosmomill/alpine-oracle-xe container>:db --volumes-from <your cosmomill/alpine-oracle-xe container> -v ords_config:/opt -e DATABASE_HOSTNAME="db" -p 8080:8080 cosmomill/alpine-ords-apex
 ```
 
+The default list of ENV variables is:
+
+```
+DATABASE_HOSTNAME=
+ORACLE_SID=XE
+DATABASE_PORT=1521
+```
+
 Connect to database
 -------------------
 
