@@ -11,7 +11,7 @@ RUN apk --update add --no-cache libarchive-tools
 ONBUILD ARG ORDS_FILE
 ONBUILD ARG SQLCL_FILE
 
-ENV TZ=GMT
+ENV TZ GMT
 ENV ORDS_VERSION 3.0.9.348.07.16
 ENV ORDS_CONFIG_DIR /opt
 ENV TOMCAT_HOME /usr/local/tomcat

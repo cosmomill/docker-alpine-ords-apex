@@ -41,7 +41,7 @@ else
 	if [ -f "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.sysdba.passwd" ]; then
 		SYSDBA_PWD=${SYSDBA_PWD:-"`cat $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.sysdba.passwd`"}
 	else
-		echo "Password for SYSDBA user not found, run docker-apex-update.sh on cosmomill/alpine-oracle-xe."
+		echo "Password for SYSDBA user not found."
 		exit 1
 	fi;
 
