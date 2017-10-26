@@ -7,7 +7,7 @@ set -e
 if [ -d "$ORDS_CONFIG_DIR/ords" ]; then
 	echo "Oracle REST Data Services configuration found."
 else
-	mkdir $TOMCAT_HOME/webapps/params
+	mkdir -p $TOMCAT_HOME/webapps/params
 
 	if [ -d "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID" ]; then
 		if [ -f "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_public_user.passwd" ]; then
