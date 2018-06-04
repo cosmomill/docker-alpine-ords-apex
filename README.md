@@ -6,7 +6,7 @@ This image is based on Alpine tomcat image ([tomcat:9-alpine](https://hub.docker
 Prerequisites
 -------------
 
-- If you want to build this image, you will need to download [Oracle REST Data Services 3.0.9.348.07.16](http://www.oracle.com/technetwork/developer-tools/rest-data-services/downloads/index.html) and [Oracle SQLcl 4.2.0.17.097.0719](http://www.oracle.com/technetwork/developer-tools/sqlcl/downloads/index.html).
+- If you want to build this image, you will need to download [Oracle REST Data Services 18.1.1.95.1251](http://www.oracle.com/technetwork/developer-tools/rest-data-services/downloads/index.html) and [Oracle SQLcl 18.1.1](http://www.oracle.com/technetwork/developer-tools/sqlcl/downloads/index.html).
 
 Usage Example
 -------------
@@ -18,7 +18,7 @@ FROM cosmomill/alpine-ords-apex
 ```
 
 ```sh
-$ docker build -t my_app . --build-arg ORDS_FILE="ords.3.0.9.348.07.16.zip" --build-arg SQLCL_FILE="sqlcl-4.2.0.17.097.0719-no-jre.zip"
+$ docker build -t my_app . --build-arg ORDS_FILE="ords.18.1.1.95.1251.zip" --build-arg SQLCL_FILE="sqlcl-18.1.1.zip"
 ```
 
 ```sh
