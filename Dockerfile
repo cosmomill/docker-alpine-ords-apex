@@ -8,6 +8,9 @@ RUN apk --update add --no-cache bash
 # install bsdtar
 RUN apk --update add --no-cache libarchive-tools
 
+# install ncurses cause SQLcl needs tput
+RUN apk --update add --no-cache ncurses
+
 ONBUILD ARG ORDS_FILE
 ONBUILD ARG SQLCL_FILE
 
@@ -32,14 +35,9 @@ ENV SQLCL_VERSION 18.1.1
 
 # install SQLcl
 ONBUILD ADD $SQLCL_FILE /tmp/
-ONBUILD RUN mkdir -p /var/lib/sqlcl && bsdtar --strip-components=2 -C /var/lib/sqlcl -xf /tmp/sqlcl-$SQLCL_VERSION.zip sqlcl/lib/* \
-	\
-	&& echo $'#!/bin/sh\n\
-\n\
-java -jar /var/lib/sqlcl/oracle.sqldeveloper.sqlcl.jar $@\n' > /usr/local/bin/sqlcl \
-	\
-	&& chmod 755 /usr/local/bin/sqlcl \
-	&& rm -f sqlcl-$SQLCL_VERSION.zip
+ONBUILD RUN bsdtar -C /var/lib -xf /tmp/sqlcl-$SQLCL_VERSION.zip \
+	&& ln -s /var/lib/sqlcl/bin/sql /usr/local/bin/sqlcl \
+	&& rm -f /tmp/sqlcl-$SQLCL_VERSION.zip
 
 # define mountable directories
 ONBUILD VOLUME /opt
