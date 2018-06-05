@@ -7,6 +7,11 @@ set -e
 if [ -d "$ORDS_CONFIG_DIR/ords" ]; then
 	echo "Oracle REST Data Services configuration found."
 else
+	if [ ! -f "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_version" ]; then
+		echo "No current APEX version found, run docker-apex-update.sh on host $DATABASE_HOSTNAME."
+		exit 1;
+	fi;
+
 	mkdir -p $TOMCAT_HOME/webapps/params
 
 	if [ -d "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID" ]; then
@@ -34,7 +39,7 @@ else
 			chown root:root $ORDS_PUBLIC_USER_PWD_FILE
 		fi;
 	else
-			echo "Oracle configuration folder not found, run docker with: --volumes-from cosmomill/alpine-oracle-xe."
+			echo "Oracle configuration folder not found, run docker with: --volumes-from host $DATABASE_HOSTNAME."
 			exit 1
 	fi;
 
@@ -48,14 +53,14 @@ else
 	if [ -f "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_listener.passwd" ]; then
 		APEX_LISTENER_PWD=${APEX_LISTENER_PWD:-"`cat $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_listener.passwd`"}
 	else
-		echo "Password for APEX_LISTENER user not found, run docker-apex-update.sh on cosmomill/alpine-oracle-xe."
+		echo "Password for APEX_LISTENER user not found, run docker-apex-update.sh on host $DATABASE_HOSTNAME."
 		exit 1
 	fi;
 
 	if [ -f "$ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_rest_public_user.passwd" ]; then
 		APEX_REST_PUBLIC_USER_PWD=${APEX_REST_PUBLIC_USER_PWD:-"`cat $ORACLE_BASE/oradata/dbconfig/$ORACLE_SID/.apex_rest_public_user.passwd`"}
 	else
-		echo "Password for APEX_REST_PUBLIC_USER user not found, run docker-apex-update.sh on cosmomill/alpine-oracle-xe."
+		echo "Password for APEX_REST_PUBLIC_USER user not found, run docker-apex-update.sh on host $DATABASE_HOSTNAME."
 		exit 1
 	fi;
 
@@ -102,7 +107,7 @@ if [ "$(ls -A $ORACLE_HOME/apex/images)" ]; then
 		echo "APEX images folder found."
 		ln -sfn $ORACLE_HOME/apex/images $TOMCAT_HOME/webapps/i
 	else
-		echo "APEX images folder not found, run docker with: --volumes-from cosmomill/alpine-oracle-xe."
+		echo "APEX images folder not found, run docker with: --volumes-from host $DATABASE_HOSTNAME."
 		exit 1
 fi;
 
