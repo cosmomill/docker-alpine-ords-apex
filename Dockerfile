@@ -42,6 +42,9 @@ ONBUILD RUN bsdtar -C /var/lib -xf /tmp/sqlcl-$SQLCL_VERSION.zip \
 # define mountable directories
 ONBUILD VOLUME /opt
 
+COPY wait-for-oracle.sh /usr/local/bin/
+RUN chmod 755 /usr/local/bin/wait-for-oracle.sh
+
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod 755 /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["docker-entrypoint.sh"]

@@ -37,3 +37,28 @@ Connect to database
 -------------------
 
 Auto generated passwords are stored in separate hidden files in ```/u01/app/oracle/oradata/dbconfig/XE``` with the naming system ```.username.passwd```.
+
+Using wait-for-oracle.sh
+------------------------
+
+If you want bootstrap the entire application with a single command using Docker Compose you have to use ```wait-for-oracle.sh```. The problem is that Docker Compose does not wait for the Oracle Database container to become ready before starting the ORDS container. When you start the application using ```docker-compose up``` Docker Compose does not ensure that the Oracle Database container is ready before the ORDS Container is started. This means your application will fail to start. The ```depends_on``` only means that the Oracle Database container should be started first but Docker Compose does not ensure Oracle Database is full ready for connections.
+Usage example:
+
+```sh
+ords:
+  depends_on:
+    - oradb
+  entrypoint: /usr/local/bin/wait-for-oracle.sh -- docker-entrypoint.sh
+  command: run
+  build:
+    context: ./ords
+  ports:
+    - "8080:8080"
+  volumes:
+    - ords_config:/opt
+  volumes_from:
+    - oradb
+  environment:
+    DATABASE_HOSTNAME: oradb
+  restart: always
+```
